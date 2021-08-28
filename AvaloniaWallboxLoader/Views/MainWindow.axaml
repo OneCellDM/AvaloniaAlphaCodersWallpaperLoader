@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaWallboxLoader.Views.MainWindow"
+        xmlns:i="using:Avalonia.Xaml.Interactivity"
+        xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaWallboxLoader">
 
@@ -19,8 +21,9 @@
         </Grid.RowDefinitions>
 
 
-        <ListBox HorizontalAlignment="Center" Background="transparent" ScrollViewer.HorizontalScrollBarVisibility="Visible"
-                 VirtualizationMode="None" SelectedIndex="{Binding SelectedCategory}">
+        <ListBox HorizontalAlignment="Center" Background="transparent"
+                 ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                 VirtualizationMode="None" SelectedIndex="{Binding SelectedMenuItem}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel Orientation="Horizontal" />
@@ -28,49 +31,84 @@
             </ListBox.ItemsPanel>
             <ListBoxItem>
                 <Border BorderThickness="2" BorderBrush="Black" Padding="10">
-                    <TextBlock Text="All"/>
+                    <TextBlock Text="Все" />
                 </Border>
             </ListBoxItem>
             <ListBoxItem>
                 <Border BorderThickness="2" BorderBrush="Black" Padding="10">
-                    <TextBlock Text="Search"/>
+                    <TextBlock Text="Поиск" />
                 </Border>
             </ListBoxItem>
             <ListBoxItem>
                 <Border BorderThickness="2" BorderBrush="Black" Padding="10">
-                    <TextBlock Text="Categories"/>
+                    <TextBlock Text="Категории" />
                 </Border>
             </ListBoxItem>
         </ListBox>
-        
-        <Grid Grid.Row="1" Margin="0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Назад"> </Button>
-            <Button Grid.Column="2" Content="Вперед"> </Button>
+        <Grid Grid.Row="1" Margin="0,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Spacing="20" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button IsVisible="{Binding ControlIsVisible}" Background="transparent">
+                    <Button.Content>
+                        <Path HorizontalAlignment="Center" Stretch="Uniform" Height="40" Width="50"
+                              Data="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
+			c-10.492,10.504-10.492,27.576,0,38.064L293.398,245.9l-184.06,184.06c-5.064,5.068-7.86,11.824-7.86,19.028
+			c0,7.212,2.796,13.968,7.86,19.04l16.124,16.116c5.068,5.068,11.824,7.86,19.032,7.86s13.968-2.792,19.032-7.86L382.678,265
+			c5.076-5.084,7.864-11.872,7.848-19.088C390.542,238.668,387.754,231.884,382.678,226.804z"
+                              Fill="Gray">
+                        </Path>
+                    </Button.Content>
+                    <Button.RenderTransform>
+                        <RotateTransform Angle="180"></RotateTransform>
+                    </Button.RenderTransform>
 
-            <ListBox Grid.Column="1" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                </Button>
+                <TextBlock  Grid.Column="1" FontSize="16" FontWeight="ExtraBold" VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{} {0} {1} : {2}">
+                            <Binding Path="Title"></Binding>
+                            <Binding Path="CurrentPage"></Binding>
+                            <Binding Path="PageCount"></Binding>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <Button IsVisible="{Binding ControlIsVisible}" Background="transparent" Grid.Column="2">
+                    <Button.Content>
+                        <Path HorizontalAlignment="Center" Stretch="Uniform" Height="40" Width="50"
+                              Data="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
+			c-10.492,10.504-10.492,27.576,0,38.064L293.398,245.9l-184.06,184.06c-5.064,5.068-7.86,11.824-7.86,19.028
+			c0,7.212,2.796,13.968,7.86,19.04l16.124,16.116c5.068,5.068,11.824,7.86,19.032,7.86s13.968-2.792,19.032-7.86L382.678,265
+			c5.076-5.084,7.864-11.872,7.848-19.088C390.542,238.668,387.754,231.884,382.678,226.804z"
+                              Fill="Gray">
+                        </Path>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <ListBox Margin="0,20" HorizontalAlignment="Center" Grid.Row="1" Background="White"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      Items="{Binding ImageModels}" VirtualizationMode="None">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel></WrapPanel> 
-                       
+                        <WrapPanel></WrapPanel>
+
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.DataTemplates>
                     <DataTemplate>
                         <StackPanel>
-                        <Border CornerRadius="10" MinHeight="200" MinWidth="400"   >
-                            <Border.Background>
-                                <ImageBrush   Source="{Binding BitmapImage}" Stretch="UniformToFill"></ImageBrush>
-                            </Border.Background>
-                        </Border>
-                            
-                            </StackPanel>
+                            <Border CornerRadius="10" MinHeight="200" MinWidth="400">
+                                <Border.Background>
+                                    <ImageBrush Source="{Binding BitmapImage}" Stretch="UniformToFill"></ImageBrush>
+                                </Border.Background>
+                            </Border>
+
+                        </StackPanel>
 
                     </DataTemplate>
                 </ListBox.DataTemplates>
@@ -78,7 +116,35 @@
 
         </Grid>
 
+        <Grid  IsVisible="{Binding CategoriesIsVisible}" Grid.RowSpan="2">
+            <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="PointerPressed">
+                    <ia:InvokeCommandAction Command="{Binding CloseCategoriesCommand}"/>
+                </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
+            <Grid.Background>
+                <SolidColorBrush Color="Gray" Opacity="0.5"></SolidColorBrush>
+            </Grid.Background>
+            <ListBox Margin="0,60" VerticalAlignment="Center" Background="White" Width="500" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Center"  Items="{Binding Categories}">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="Margin" Value="10"></Setter>
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel ></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <TextBlock  Width="120" Text="{Binding Title}"></TextBlock>
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+        </Grid>
 
     </Grid>
+
 
 </Window>
