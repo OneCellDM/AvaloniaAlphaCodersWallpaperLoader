@@ -9,21 +9,76 @@
         Title="AvaloniaWallboxLoader">
 
     <Design.DataContext>
-        <vm:MainWindowViewModel/>
+        <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <ListBox Items="{Binding Categories}" SelectedIndex="{Binding SelectedCategory}">
-            <ListBox.DataTemplates>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Title}"></TextBlock>
-                </DataTemplate>
-            </ListBox.DataTemplates>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+
+        <ListBox HorizontalAlignment="Center" Background="transparent" ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                 VirtualizationMode="None" SelectedIndex="{Binding SelectedCategory}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBoxItem>
+                <Border BorderThickness="2" BorderBrush="Black" Padding="10">
+                    <TextBlock Text="All"/>
+                </Border>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Border BorderThickness="2" BorderBrush="Black" Padding="10">
+                    <TextBlock Text="Search"/>
+                </Border>
+            </ListBoxItem>
+            <ListBoxItem>
+                <Border BorderThickness="2" BorderBrush="Black" Padding="10">
+                    <TextBlock Text="Categories"/>
+                </Border>
+            </ListBoxItem>
         </ListBox>
+        
+        <Grid Grid.Row="1" Margin="0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Назад"> </Button>
+            <Button Grid.Column="2" Content="Вперед"> </Button>
+
+            <ListBox Grid.Column="1" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     Items="{Binding ImageModels}" VirtualizationMode="None">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel></WrapPanel> 
+                       
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.DataTemplates>
+                    <DataTemplate>
+                        <StackPanel>
+                        <Border CornerRadius="10" MinHeight="200" MinWidth="400"   >
+                            <Border.Background>
+                                <ImageBrush   Source="{Binding BitmapImage}" Stretch="UniformToFill"></ImageBrush>
+                            </Border.Background>
+                        </Border>
+                            
+                            </StackPanel>
+
+                    </DataTemplate>
+                </ListBox.DataTemplates>
+            </ListBox>
+
+        </Grid>
+
+
     </Grid>
 
 </Window>

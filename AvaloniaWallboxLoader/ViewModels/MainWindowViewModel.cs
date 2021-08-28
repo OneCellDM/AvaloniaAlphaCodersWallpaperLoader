@@ -1,4 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Mime;
+using System.Threading.Tasks;
+using AvaloniaWallboxLoader.Models;
 using WallBox;
 using ReactiveUI;
 
@@ -8,7 +13,7 @@ namespace AvaloniaWallboxLoader.ViewModels
     {
         private int _SelectedCategory = -1;
         public ObservableCollection<WallBox.DataModel.CategoryModel> Categories { get; set; } = new();
-        public ObservableCollection<WallBox.DataModel.ImageModel> ImageModels { get; set; } = new();
+        public ObservableCollection<ImageModel> ImageModels{ get; set; } = new();
 
         public int SelectedCategory
         {
@@ -22,12 +27,8 @@ namespace AvaloniaWallboxLoader.ViewModels
                 }
             }
         }
-
-        public MainWindowViewModel()
-        {
-            GetCategories();
-        }
-
+        
+        public MainWindowViewModel() => GetCategories();
         private void GetCategories()
         {
             var resAwaiter = WallBoxApi.GetCategoriesAsync().GetAwaiter();
@@ -35,7 +36,6 @@ namespace AvaloniaWallboxLoader.ViewModels
             {
                 var res = resAwaiter.GetResult();
                 res.ForEach(x => Categories.Add(x));
-
                 SelectedCategory = 0;
             });
         }
@@ -45,7 +45,10 @@ namespace AvaloniaWallboxLoader.ViewModels
             var CategoryGetAwaiter = WallBoxApi.GetCategoryPageData(Categories[index].Url).GetAwaiter();
             CategoryGetAwaiter.OnCompleted(() =>
             {
-                var items = CategoryGetAwaiter.GetResult().Item2;
+                var items = CategoryGetAwaiter.GetResult().Item1;
+                
+                items.ForEach(x=>ImageModels.Add(new(x)));
+                Task.Run(() =>ImageModels.ToList().ForEach(x => x.LoadBItmap()));
             });
         }
     }
