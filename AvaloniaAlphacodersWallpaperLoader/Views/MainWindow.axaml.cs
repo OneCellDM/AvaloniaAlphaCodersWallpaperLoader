@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AvaloniaWallboxLoader.Views
+namespace AvaloniaAlphacodersWallpaperLoader.Views
 {
     public partial class MainWindow : Window
     {

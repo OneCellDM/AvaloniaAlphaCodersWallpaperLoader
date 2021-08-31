@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using AvaloniaWallboxLoader.ViewModels;
-using AvaloniaWallboxLoader.Views;
+using AvaloniaAlphacodersWallpaperLoader.ViewModels;
+using AvaloniaAlphacodersWallpaperLoader.Views;
 
-namespace AvaloniaWallboxLoader
+namespace AvaloniaAlphacodersWallpaperLoader
 {
     public class App : Application
     {

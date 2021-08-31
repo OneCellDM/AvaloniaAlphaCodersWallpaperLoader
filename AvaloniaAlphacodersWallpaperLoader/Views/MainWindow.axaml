@@ -1,14 +1,15 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:AvaloniaWallboxLoader.ViewModels"
+        xmlns:vm="using:AvaloniaAlphacodersWallpaperLoader.ViewModels"
+        xmlns:view="using:AvaloniaAlphacodersWallpaperLoader.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="AvaloniaWallboxLoader.Views.MainWindow"
+        x:Class="AvaloniaAlphacodersWallpaperLoader.Views.MainWindow"
         xmlns:i="using:Avalonia.Xaml.Interactivity"
         xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaWallboxLoader">
+        Title="AvaloniaAlphacodersWallpaperLoader">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -22,27 +23,35 @@
 
 
         <ListBox HorizontalAlignment="Center" Background="transparent"
-                 ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  VirtualizationMode="None" SelectedIndex="{Binding SelectedMenuItem}">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="BorderThickness" Value="2" />
+                    <Setter Property="BorderBrush" Value="Gray" />
+                    <Setter Property="Margin" Value="10" />
+                </Style>
+            </ListBox.Styles>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel Orientation="Horizontal" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBoxItem>
-                <Border BorderThickness="2" BorderBrush="Black" Padding="10">
-                    <TextBlock Text="Все" />
-                </Border>
+
+                <TextBlock Text="Все" />
+
             </ListBoxItem>
             <ListBoxItem>
-                <Border BorderThickness="2" BorderBrush="Black" Padding="10">
-                    <TextBlock Text="Поиск" />
-                </Border>
+
+                <TextBlock Text="Поиск" />
+
             </ListBoxItem>
             <ListBoxItem>
-                <Border BorderThickness="2" BorderBrush="Black" Padding="10">
-                    <TextBlock Text="Категории" />
-                </Border>
+
+                <TextBlock Text="Категории" />
+
             </ListBoxItem>
         </ListBox>
 
@@ -67,7 +76,7 @@
                     </Button.RenderTransform>
 
                 </Button>
-                <TextBlock  Grid.Column="1" FontSize="16" FontWeight="ExtraBold" VerticalAlignment="Center">
+                <TextBlock Grid.Column="1" FontSize="16" FontWeight="ExtraBold" VerticalAlignment="Center">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{} {0} {1} : {2}">
                             <Binding Path="Title"></Binding>
@@ -116,35 +125,10 @@
 
         </Grid>
 
-        <Grid  IsVisible="{Binding CategoriesIsVisible}" Grid.RowSpan="2">
-            <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="PointerPressed">
-                    <ia:InvokeCommandAction Command="{Binding CloseCategoriesCommand}"/>
-                </ia:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
-            <Grid.Background>
-                <SolidColorBrush Color="Gray" Opacity="0.5"></SolidColorBrush>
-            </Grid.Background>
-            <ListBox Margin="0,60" VerticalAlignment="Center" Background="White" Width="500" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Center"  Items="{Binding Categories}">
-                <ListBox.Styles>
-                    <Style Selector="ListBoxItem">
-                        <Setter Property="Margin" Value="10"></Setter>
-                    </Style>
-                </ListBox.Styles>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel ></WrapPanel>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.DataTemplates>
-                    <DataTemplate>
-                        <TextBlock  Width="120" Text="{Binding Title}"></TextBlock>
-                    </DataTemplate>
-                </ListBox.DataTemplates>
-            </ListBox>
-        </Grid>
-
+      
+        <view:SearchControl IsVisible="{Binding SearchIsVisible}" Grid.RowSpan="2" />
+        <view:CategoryListControl IsVisible="{Binding CategoriesIsVisible}" ></view:CategoryListControl>
     </Grid>
-
+   
 
 </Window>

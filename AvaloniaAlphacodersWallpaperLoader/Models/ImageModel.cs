@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reactive.Subjects;
@@ -7,11 +8,13 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using JetBrains.Annotations;
+using WallsAlphaCodersLib.Objects.ResponseModels;
 
-namespace AvaloniaWallboxLoader.Models
+namespace AvaloniaAlphacodersWallpaperLoader.Models
 {
-    public class ImageModel:WallBox.DataModel.ImageModel,INotifyPropertyChanged
+    public class ImageModel:Wallpaper,INotifyPropertyChanged
     {
+        
         private Bitmap _bitmap;
 
         public Bitmap BitmapImage
@@ -24,47 +27,29 @@ namespace AvaloniaWallboxLoader.Models
             }
         }
 
-        public  ImageModel(WallBox.DataModel.ImageModel image)
-        {
-            Alt = image.Alt;
-            Date = image.Date;
-            Height = image.Height;
-            Width = image.Width;
-            LoadPageUrl = image.LoadPageUrl;
-            Url = image.Url;
-        }
+     
 
         public async Task<MemoryStream>? GetStream()
         {
             HttpClient client = new HttpClient();
-            try
-            {
-                return  new MemoryStream(await client.GetByteArrayAsync(Url));
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            finally{client.Dispose();}
+           
+            Debug.WriteLine(url_thumb);
+                return  new MemoryStream(await client.GetByteArrayAsync(url_thumb));
+            
+            
             
         }
 
         public async void LoadBItmap()
         {
-            try
-            {
+           
 
 
                 using (var stream = await GetStream())
                 {
-                    BitmapImage = await Task.Run(() => new Bitmap(stream));
+                    BitmapImage = await Task.Run(() => Bitmap.DecodeToWidth( stream,300));
                 }
-            }
-            
-            catch (Exception e)
-            {
-                
-            }
+          
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

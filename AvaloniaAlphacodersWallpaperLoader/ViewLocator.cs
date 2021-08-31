@@ -1,9 +1,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using AvaloniaWallboxLoader.ViewModels;
+using AvaloniaAlphacodersWallpaperLoader.ViewModels;
 
-namespace AvaloniaWallboxLoader
+namespace AvaloniaAlphacodersWallpaperLoader
 {
     public class ViewLocator : IDataTemplate
     {

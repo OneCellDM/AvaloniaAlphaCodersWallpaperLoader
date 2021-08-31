@@ -6,14 +6,35 @@
     </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Include="Views\CategoryListControl.axaml">
+          <SubType>Designer</SubType>
+        </AvaloniaResource>
+        <AvaloniaResource Include="Views\SearchControl.axaml">
+          <SubType>Designer</SubType>
+        </AvaloniaResource>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="0.10.7" />
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.3" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
         <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.7" />
         <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.7" />
         <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.7" />
         <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\WallsAlphaCodersLib\WallsAlphaCodersLib.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <AvaloniaXaml Remove="Views\Controls\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Views\Controls\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Remove="Views\Controls\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Views\Controls\**" />
     </ItemGroup>
 </Project>
