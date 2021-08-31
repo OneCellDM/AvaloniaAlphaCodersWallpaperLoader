@@ -1,7 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:AvaloniaAlphacodersWallpaperLoader.ViewModels"
-        xmlns:view="using:AvaloniaAlphacodersWallpaperLoader.Views"
+        xmlns:views="using:AvaloniaAlphacodersWallpaperLoader.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -11,124 +11,112 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaAlphacodersWallpaperLoader">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainWindowViewModel />
+	</Design.DataContext>
 
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+	<Grid Background="White">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
 
-
-        <ListBox HorizontalAlignment="Center" Background="transparent"
+		<ListBox HorizontalAlignment="Center" Background="transparent"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  VirtualizationMode="None" SelectedIndex="{Binding SelectedMenuItem}">
-            <ListBox.Styles>
-                <Style Selector="ListBoxItem">
-                    <Setter Property="CornerRadius" Value="5" />
-                    <Setter Property="BorderThickness" Value="2" />
-                    <Setter Property="BorderBrush" Value="Gray" />
-                    <Setter Property="Margin" Value="10" />
-                </Style>
-            </ListBox.Styles>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBoxItem>
+			<ListBox.Styles>
+				<Style Selector="ListBoxItem">
+					<Setter Property="CornerRadius" Value="5" />
+					<Setter Property="BorderThickness" Value="2" />
+					<Setter Property="BorderBrush" Value="Gray" />
+					<Setter Property="Margin" Value="10" />
+				</Style>
+			</ListBox.Styles>
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<VirtualizingStackPanel Orientation="Horizontal" />
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+			<ListBoxItem>
 
-                <TextBlock Text="Все" />
+				<TextBlock Text="Все" />
+			</ListBoxItem>
+			<ListBoxItem>
 
-            </ListBoxItem>
-            <ListBoxItem>
+				<TextBlock Text="Поиск" />
+			</ListBoxItem>
+			<ListBoxItem>
 
-                <TextBlock Text="Поиск" />
+				<TextBlock Text="Категории" />
+			</ListBoxItem>
+		</ListBox>
 
-            </ListBoxItem>
-            <ListBoxItem>
-
-                <TextBlock Text="Категории" />
-
-            </ListBoxItem>
-        </ListBox>
-
-        <Grid Grid.Row="1" Margin="0,20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <StackPanel Spacing="20" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button IsVisible="{Binding ControlIsVisible}" Background="transparent">
-                    <Button.Content>
-                        <Path HorizontalAlignment="Center" Stretch="Uniform" Height="40" Width="50"
+		<Grid Grid.Row="1" Margin="0,20">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<StackPanel Spacing="20" Orientation="Horizontal" HorizontalAlignment="Center">
+				<Button IsVisible="{Binding ControlIsVisible}" Background="transparent">
+					<Button.Content>
+						<Path HorizontalAlignment="Center" Stretch="Uniform" Height="40" Width="50"
                               Data="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
 			c-10.492,10.504-10.492,27.576,0,38.064L293.398,245.9l-184.06,184.06c-5.064,5.068-7.86,11.824-7.86,19.028
 			c0,7.212,2.796,13.968,7.86,19.04l16.124,16.116c5.068,5.068,11.824,7.86,19.032,7.86s13.968-2.792,19.032-7.86L382.678,265
 			c5.076-5.084,7.864-11.872,7.848-19.088C390.542,238.668,387.754,231.884,382.678,226.804z"
                               Fill="Gray">
-                        </Path>
-                    </Button.Content>
-                    <Button.RenderTransform>
-                        <RotateTransform Angle="180"></RotateTransform>
-                    </Button.RenderTransform>
+						</Path>
+					</Button.Content>
+					<Button.RenderTransform>
+						<RotateTransform Angle="180"></RotateTransform>
+					</Button.RenderTransform>
+				</Button>
+				<TextBlock Grid.Column="1" FontSize="16" FontWeight="ExtraBold" VerticalAlignment="Center">
+					<TextBlock.Text>
+						<MultiBinding StringFormat="{} {0} {1} : {2}">
+							<Binding Path="Title"></Binding>
+							<Binding Path="CurrentPage"></Binding>
+							<Binding Path="PageCount"></Binding>
+						</MultiBinding>
+					</TextBlock.Text>
+				</TextBlock>
 
-                </Button>
-                <TextBlock Grid.Column="1" FontSize="16" FontWeight="ExtraBold" VerticalAlignment="Center">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{} {0} {1} : {2}">
-                            <Binding Path="Title"></Binding>
-                            <Binding Path="CurrentPage"></Binding>
-                            <Binding Path="PageCount"></Binding>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-
-                <Button IsVisible="{Binding ControlIsVisible}" Background="transparent" Grid.Column="2">
-                    <Button.Content>
-                        <Path HorizontalAlignment="Center" Stretch="Uniform" Height="40" Width="50"
+				<Button IsVisible="{Binding ControlIsVisible}" Background="transparent" Grid.Column="2">
+					<Button.Content>
+						<Path HorizontalAlignment="Center" Stretch="Uniform" Height="40" Width="50"
                               Data="M382.678,226.804L163.73,7.86C158.666,2.792,151.906,0,144.698,0s-13.968,2.792-19.032,7.86l-16.124,16.12
 			c-10.492,10.504-10.492,27.576,0,38.064L293.398,245.9l-184.06,184.06c-5.064,5.068-7.86,11.824-7.86,19.028
 			c0,7.212,2.796,13.968,7.86,19.04l16.124,16.116c5.068,5.068,11.824,7.86,19.032,7.86s13.968-2.792,19.032-7.86L382.678,265
 			c5.076-5.084,7.864-11.872,7.848-19.088C390.542,238.668,387.754,231.884,382.678,226.804z"
                               Fill="Gray">
-                        </Path>
-                    </Button.Content>
-                </Button>
-            </StackPanel>
+						</Path>
+					</Button.Content>
+				</Button>
+			</StackPanel>
 
-            <ListBox Margin="0,20" HorizontalAlignment="Center" Grid.Row="1" Background="White"
+			<ListBox SelectedIndex="{Binding ImageSelectedIndex}" Margin="0,20" HorizontalAlignment="Center" Grid.Row="1" Background="White"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      Items="{Binding ImageModels}" VirtualizationMode="None">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel></WrapPanel>
-
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.DataTemplates>
-                    <DataTemplate>
-                        <StackPanel>
-                            <Border CornerRadius="10" MinHeight="200" MinWidth="400">
-                                <Border.Background>
-                                    <ImageBrush Source="{Binding BitmapImage}" Stretch="UniformToFill"></ImageBrush>
-                                </Border.Background>
-                            </Border>
-
-                        </StackPanel>
-
-                    </DataTemplate>
-                </ListBox.DataTemplates>
-            </ListBox>
-
-        </Grid>
-
-      
-        <view:SearchControl IsVisible="{Binding SearchIsVisible}" Grid.RowSpan="2" />
-        <view:CategoryListControl IsVisible="{Binding CategoriesIsVisible}" ></view:CategoryListControl>
-    </Grid>
-   
-
+				<ListBox.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel></WrapPanel>
+					</ItemsPanelTemplate>
+				</ListBox.ItemsPanel>
+				<ListBox.DataTemplates>
+					<DataTemplate>
+						<StackPanel>
+							<Border CornerRadius="10" MinHeight="200" MinWidth="400">
+								<Border.Background>
+									<ImageBrush Source="{Binding BitmapImage}" Stretch="UniformToFill"></ImageBrush>
+								</Border.Background>
+							</Border>
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.DataTemplates>
+			</ListBox>
+		</Grid>
+		<views:SearchViewControl Grid.RowSpan="2" IsVisible="{Binding SearchIsVisible}" />
+		<views:CategoryListControl Grid.RowSpan="2"  IsVisible="{Binding CategoriesIsVisible}" />
+		<views:ImageView  Grid.RowSpan="2" IsVisible="{Binding  ImageViewIsVisible}" />
+	</Grid>
 </Window>

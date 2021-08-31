@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace AvaloniaAlphacodersWallpaperLoader.Views
 {
-	public partial class CategoryListControl : UserControl
+	public partial class SearchViewControl : UserControl
 	{
-		public CategoryListControl()
+		public SearchViewControl()
 		{
 			InitializeComponent();
 		}

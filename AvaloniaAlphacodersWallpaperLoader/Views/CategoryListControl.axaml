@@ -1,13 +1,13 @@
-<UserControl 
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaAlphacodersWallpaperLoader.Views.CategoryListControl">
   
-	xmlns="https://github.com/avaloniaui"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:i="using:Avalonia.Xaml.Interactivity"
-    x:Class="AvaloniaAlphacodersWallpaperLoader.Views.CategoryListControl"
-    xmlns:ia="using:Avalonia.Xaml.Interactions.Core">
-	
-    
-            <i:Interaction.Behaviors>
+ <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="PointerPressed">
                     <ia:InvokeCommandAction Command="{Binding CloseCategoriesCommand}" />
                 </ia:EventTriggerBehavior>
@@ -24,7 +24,7 @@
                 <Border Width="540" CornerRadius="10"
                         Background="White">
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="ExtraBold"
-                               FontSize="20" Margin="20" Text="ÐšÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¸" />
+                               FontSize="20" Margin="20" Text="Êàòåãîðèè" />
                 </Border>
                 <Border Grid.Row="1" Margin="0,20,0,0"
                         Background="White"
@@ -54,6 +54,5 @@
                     </ListBox>
                 </Border>
             </Grid>
-        
 
 </UserControl>
