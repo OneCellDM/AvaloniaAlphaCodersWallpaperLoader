@@ -1,174 +1,120 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using AvaloniaAlphacodersWallpaperLoader.Models;
+using AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces;
 using ReactiveUI;
 using WallsAlphaCodersLib;
-using WallsAlphaCodersLib.Objects.RequestModels;
 
 namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
 {
-	public class MainWindowViewModel : ViewModelBase
-	{
-		private int _CurrentPage = 1;
-		private int _PageCount = 0;
-		private string _Title;
+    public class MainWindowViewModel : ViewModelBase
+    {
+        private bool _NewPage = true;
+        private string _Title;
+        private int _SelectedMenuItem = -1;
+        private int _oldSelectedMenuItem = -1;
+        private int _ImageSelectedIndex = -1;
+        private bool _ImageViewIsVisible = false;
+        private IView _ActiveView;
+        private IView _OldActiveView;
+        private CategoryViewModel CategoryViewModel { get; set; }
+        private RandomWallpapersViewModel RandomWallpapersViewModel { get; set; }
+        private SearchViewModel SearchViewModel { get; set; }
+        private WallpaperApi api = new WallpaperApi("dcc164e06ea94f0187af2a6dfdc8bef8");
+        private ImageViewViewModel _ImageViewViewModel;
+        public ObservableCollection<ImageModel> ImageModels { get; set; } = new ObservableCollection<ImageModel>();
 
-		private int _SelectedMenuItem = -1;
-		private int _ImageSelectedIndex = -1;
-		private bool _CategoriesIsVisible = false;
+        public IView ActiveView
+        {
+            get => _ActiveView;
+            set
+            {
+                _OldActiveView = _ActiveView;
+                this.RaiseAndSetIfChanged(ref _ActiveView, value);
+                _ActiveView.CloseViewEvent += ActiveViewOnCloseViewEvent;
+            }
+        }
 
-		private bool _ControlIsVisible = true;
-		private bool _SearchIsVisible = false;
-		private bool _ImageViewIsVisible = false;
+        private void ActiveViewOnCloseViewEvent()
+        {
+            ActiveView = _OldActiveView;
+            _NewPage = false;
+            SelectedMenuItem = _oldSelectedMenuItem;
+        }
 
-		private ImageViewViewModel _ImageViewViewModel;
+        public ImageViewViewModel ImageViewViewModel
+        {
+            get => _ImageViewViewModel;
+            set => this.RaiseAndSetIfChanged(ref _ImageViewViewModel, value);
+        }
 
-		private List<int> Pages;
+        public bool ImageViewIsVisible
+        {
+            get => _ImageViewIsVisible;
+            set => this.RaiseAndSetIfChanged(ref _ImageViewIsVisible, value);
+        }
 
-		public ImageViewViewModel ImageViewViewModel
-		{
-			get => _ImageViewViewModel;
-			set => this.RaiseAndSetIfChanged(ref _ImageViewViewModel, value);
-		}
 
-		public bool CategoriesIsVisible
-		{
-			get => _CategoriesIsVisible;
-			set => this.RaiseAndSetIfChanged(ref _CategoriesIsVisible, value);
-		}
+        public int ImageSelectedIndex
+        {
+            get => _ImageSelectedIndex;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _ImageSelectedIndex, value);
+                if (_ImageSelectedIndex > -1)
+                {
+                    ImageViewViewModel = new ImageViewViewModel(ImageModels[_ImageSelectedIndex]);
+                    ImageViewIsVisible = true;
+                    ImageViewViewModel.CloseEvent += delegate
+                    {
+                        ImageViewIsVisible = false;
+                        ImageViewViewModel = null;
+                    };
+                }
+            }
+        }
 
-		public bool SearchIsVisible
-		{
-			get => _SearchIsVisible;
-			set => this.RaiseAndSetIfChanged(ref _SearchIsVisible, value);
-		}
+        public int SelectedMenuItem
+        {
+            get => _SelectedMenuItem;
+            set
+            {
+                if (_NewPage) _oldSelectedMenuItem = _SelectedMenuItem;
+                this.RaiseAndSetIfChanged(ref _SelectedMenuItem, value);
+                if (_SelectedMenuItem > -1)
+                {
+                    ActiveView.IsVisible = false;
+                    switch (value)
+                    {
+                        case 0:
+                        {
+                            ActiveView = RandomWallpapersViewModel;
+                            break;
+                        }
+                        case 1:
+                        {
+                            ActiveView = SearchViewModel;
+                            break;
+                        }
+                        case 2:
+                        {
+                            ActiveView = CategoryViewModel;
+                            break;
+                        }
+                    }
 
-		public bool ImageViewIsVisible
-		{
-			get => _ImageViewIsVisible;
-			set => this.RaiseAndSetIfChanged(ref _ImageViewIsVisible, value);
-		}
+                    if (_NewPage) ActiveView.IsVisible = true;
+                    else _NewPage = true;
+                }
+            }
+        }
 
-		public bool ControlIsVisible
-		{
-			get => _ControlIsVisible;
-			set => this.RaiseAndSetIfChanged(ref _ControlIsVisible, value);
-		}
-
-		public int CurrentPage
-		{
-			get => _CurrentPage;
-			set => this.RaiseAndSetIfChanged(ref _CurrentPage, value);
-		}
-
-		public int PageCount
-		{
-			get => _PageCount;
-			set => this.RaiseAndSetIfChanged(ref _PageCount, value);
-		}
-
-		public int ImageSelectedIndex
-		{
-			get => _ImageSelectedIndex;
-			set
-			{
-				this.RaiseAndSetIfChanged(ref _ImageSelectedIndex, value);
-				if (_ImageSelectedIndex > -1)
-				{
-					ImageViewViewModel = new ImageViewViewModel(ImageModels[_ImageSelectedIndex]);
-				}
-			}
-		}
-
-		public string Title
-		{
-			get => _Title;
-			set => this.RaiseAndSetIfChanged(ref _Title, value);
-		}
-
-		public ObservableCollection<ImageModel> ImageModels { get; set; } = new ObservableCollection<ImageModel>();
-
-		public IReactiveCommand CloseCategoriesCommand { get; set; }
-
-		public IReactiveCommand CloseSearchCommand { get; set; }
-
-		public int SelectedMenuItem
-		{
-			get => _SelectedMenuItem;
-			set
-			{
-				this.RaiseAndSetIfChanged(ref _SelectedMenuItem, value);
-				switch (value)
-				{
-					case 0:
-						{
-							ControlIsVisible = true;
-							Title = "Все";
-
-							break;
-						}
-					case 1:
-						{
-							ControlIsVisible = false;
-							SearchIsVisible = true;
-							SelectedMenuItem = -1;
-							break;
-						}
-					case 2:
-						{
-							ControlIsVisible = false;
-							CategoriesIsVisible = true;
-							SelectedMenuItem = -1;
-							break;
-						}
-				}
-			}
-		}
-
-		public MainWindowViewModel()
-		{
-			LoadData();
-			CloseCategoriesCommand = ReactiveCommand.Create((object ob) =>
-			{
-				CategoriesIsVisible = false;
-				ControlIsVisible = true;
-				SelectedMenuItem = -1;
-			});
-			CloseSearchCommand = ReactiveCommand.Create((object ob) =>
-			{
-				SearchIsVisible = false;
-				ControlIsVisible = true;
-				SelectedMenuItem = -1;
-			});
-		}
-
-		private void GetCategories()
-		{
-		}
-
-		private void LoadData()
-		{
-			WallpaperApi api = new WallpaperApi("dcc164e06ea94f0187af2a6dfdc8bef8");
-
-			var resAwaiter = api.RandomWallpapers(new RandomWallpaperRequest()).GetAwaiter();
-			resAwaiter.OnCompleted(() =>
-			{
-				try
-				{
-					if (resAwaiter.GetResult() != null)
-					{
-						resAwaiter.GetResult().wallpapers.ForEach(x => ImageModels.Add(new(x)));
-						Task.Run(() => ImageModels.ToList().ForEach(x => x.LoadBItmap()));
-					}
-				}
-				catch (ApiException ex)
-				{
-					Debug.WriteLine(ex.Message);
-				}
-			});
-		}
-	}
+        public MainWindowViewModel()
+        {
+            CategoryViewModel = new CategoryViewModel(api, ImageModels);
+            RandomWallpapersViewModel = new RandomWallpapersViewModel(api, ImageModels);
+            SearchViewModel = new SearchViewModel(api, ImageModels);
+            ActiveView = RandomWallpapersViewModel;
+            SelectedMenuItem = 0;
+        }
+    }
 }

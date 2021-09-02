@@ -1,8 +1,5 @@
 ﻿using Avalonia.Media.Imaging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI;
 using System.Net.Http;
@@ -11,28 +8,70 @@ using System.IO;
 
 namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
 {
-	public class ImageViewViewModel : ViewModelBase
-	{
-		private Bitmap _Bitmap;
-		public Bitmap Image { get => _Bitmap; set => this.RaiseAndSetIfChanged(ref _Bitmap, value); }
+    public class ImageViewViewModel : ViewModelBase
+    {
+        public delegate void Close();
 
-		public ImageModel ImageModel { get; private set; }
+        public event Close CloseEvent;
 
-		public ImageViewViewModel(ImageModel imageModel)
-		{
-			ImageModel = imageModel;
+        private Bitmap _Bitmap;
+        private bool _IsLoading;
 
-			Task.Run(() => loadFullImage());
-		}
+        public IReactiveCommand CloseCommand { get; set; }
 
-		public async void loadFullImage()
-		{
-			HttpClient httpClient = new HttpClient();
-			try
-			{
-				Image = new Bitmap(new MemoryStream(await httpClient.GetByteArrayAsync(ImageModel.url_image)));
-			}
-			finally { httpClient.Dispose(); }
-		}
-	}
+        public Bitmap Image
+        {
+            get => _Bitmap;
+            set => this.RaiseAndSetIfChanged(ref _Bitmap, value);
+        }
+
+        public ImageModel ImageModel { get; private set; }
+
+        public bool IsLoading
+        {
+            get => _IsLoading;
+            set => this.RaiseAndSetIfChanged(ref _IsLoading, value);
+        }
+
+        public ImageViewViewModel(ImageModel imageModel)
+        {
+            CloseCommand = ReactiveCommand.Create((object obj) => { CloseEvent?.Invoke(); });
+
+            ImageModel = imageModel;
+
+            Task.Run(() => LoadBItmap());
+        }
+
+        private async Task<MemoryStream>? GetStream()
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    return new MemoryStream(await client.GetByteArrayAsync(ImageModel.url_image));
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async void LoadBItmap()
+        {
+            try
+            {
+                IsLoading = true;
+                using (var stream = await GetStream())
+                {
+                    if (stream != null)
+                        Image = await Task.Run(() => (new Bitmap(stream)));
+                }
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+    }
 }
