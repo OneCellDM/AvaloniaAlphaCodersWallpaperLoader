@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Avalonia.Animation;
 using AvaloniaAlphacodersWallpaperLoader.Models;
 using AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces;
 using ReactiveUI;
@@ -80,6 +81,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
             {
                 if (_NewPage) _oldSelectedMenuItem = _SelectedMenuItem;
                 this.RaiseAndSetIfChanged(ref _SelectedMenuItem, value);
+                    
                 if (_SelectedMenuItem > -1)
                 {
                     ActiveView.IsVisible = false;
@@ -88,6 +90,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
                         case 0:
                         {
                             ActiveView = RandomWallpapersViewModel;
+                            ActiveView.Load();
                             break;
                         }
                         case 1:
@@ -114,7 +117,10 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
             RandomWallpapersViewModel = new RandomWallpapersViewModel(api, ImageModels);
             SearchViewModel = new SearchViewModel(api, ImageModels);
             ActiveView = RandomWallpapersViewModel;
+            ActiveView.Load();
             SelectedMenuItem = 0;
+
+            
         }
     }
 }

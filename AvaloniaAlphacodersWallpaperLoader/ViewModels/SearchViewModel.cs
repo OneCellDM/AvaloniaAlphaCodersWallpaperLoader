@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using AvaloniaAlphacodersWallpaperLoader.Models;
 using AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces;
@@ -19,6 +21,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
         private string _Title;
 
         private bool isSearch = false;
+        private bool _IsLoading;
 
         public IReactiveCommand SearchCommand { get; set; }
 
@@ -36,6 +39,11 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
         {
             get => _Term;
             set => this.RaiseAndSetIfChanged(ref _Term, value);
+        }
+        public bool IsLoading
+        {
+            get => _IsLoading;
+            set => this.RaiseAndSetIfChanged(ref _IsLoading, value);
         }
 
         public bool IsVisible
@@ -96,24 +104,44 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
         }
 
 
-        public void Load()
+        public async Task Load()
         {
             Images.Clear();
+            
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < 30; i++)
+                    Images.Add(new());
+                
+            });
+            
             var resAwaiter = Api.SearchWallpapers(new SearchWallpaperRequestParams() {term = Term, page = CurrentPage})
                 .GetAwaiter();
+            
             resAwaiter.OnCompleted(() =>
             {
                 try
                 {
                     if (resAwaiter.GetResult() != null)
-                    {
-                        resAwaiter.GetResult().wallpapers.ForEach(x => Images.Add(new(x)));
-                        Task.Run(() => Images.ToList().ForEach(x => x.LoadBItmap()));
-                    }
+                        {
+                            var res= resAwaiter.GetResult().wallpapers;
+                        
+                            for (int i = 0; i <res.Count; i++)
+                                Images[i].Load(res[i]);
+                        
+                            Task.Run(() => Images.ToList().ForEach(x => x.LoadBItmap()));
+                        }
+                    else Images.Clear();
+                    
                 }
                 catch (ApiException ex)
                 {
                     Debug.WriteLine(ex.Message);
+                    Images.Clear();
+                }
+                finally
+                {
+                    IsLoading = false;
                 }
             });
         }

@@ -5,30 +5,30 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaResource Include="Assets\**" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="0.10.7"/>
-        <PackageReference Include="Avalonia.Desktop" Version="0.10.7"/>
-        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7"/>
-        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.7"/>
-        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.7"/>
-        <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.7"/>
-        <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.9.1"/>
-        <PackageReference Include="HtmlAgilityPack" Version="1.11.36"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Avalonia" Version="0.10.7" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.7" />
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.7" />
+        <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.7" />
+        <PackageReference Include="Deadpikle.AvaloniaProgressRing" Version="0.9.1" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
     <ItemGroup>
-        <AvaloniaXaml Remove="Views\Controls\**"/>
+        <AvaloniaXaml Remove="Views\Controls\**" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Remove="Views\Controls\**"/>
+        <Compile Remove="Views\Controls\**" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Remove="Views\Controls\**"/>
+        <EmbeddedResource Remove="Views\Controls\**" />
     </ItemGroup>
     <ItemGroup>
-        <None Remove="Views\Controls\**"/>
+        <None Remove="Views\Controls\**" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="Views\CategoryListControl.axaml.cs">

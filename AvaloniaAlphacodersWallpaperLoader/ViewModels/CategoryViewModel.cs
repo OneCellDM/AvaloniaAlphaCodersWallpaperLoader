@@ -20,6 +20,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
 
         private bool _BackPginationIsVisible;
         private bool _NextPaginationIsVisible;
+        private bool _IsLoading;
 
 
         public bool BackPaginationIsVisible
@@ -49,6 +50,12 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
         {
             get => _IsVisible;
             set => this.RaiseAndSetIfChanged(ref _IsVisible, value);
+        }
+
+        public bool IsLoading
+        {
+            get => _IsLoading;
+            set => this.RaiseAndSetIfChanged(ref _IsLoading, value);
         }
 
         public ObservableCollection<Category> Categories { get; set; } = new();
@@ -108,9 +115,15 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
             resAwaiter.OnCompleted(() => { resAwaiter.GetResult().categories.ForEach(x => Categories.Add(x)); });
         }
 
-        public void Load()
+        public async Task Load()
         {
+           
             Images.Clear();
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < 30; i++)
+                    Images.Add(new());
+            });
             var resAwaiter = Api.Category(new CategoryRequestParams()
             {
                 id = Categories[CategorySelectedIndex].id,
@@ -124,13 +137,22 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
                 {
                     if (resAwaiter.GetResult() != null)
                     {
-                        resAwaiter.GetResult().wallpapers.ForEach(x => Images.Add(new(x)));
+                        var res= resAwaiter.GetResult().wallpapers;
+                        
+                        for (int i = 0; i <res.Count; i++)
+                            Images[i].Load(res[i]);
+                        
                         Task.Run(() => Images.ToList().ForEach(x => x.LoadBItmap()));
                     }
+                    else Images.Clear();
                 }
                 catch (ApiException ex)
                 {
                     Debug.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    IsLoading = false;
                 }
             });
         }
