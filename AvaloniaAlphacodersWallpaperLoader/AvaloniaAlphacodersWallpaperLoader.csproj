@@ -41,4 +41,7 @@
             <DependentUpon>SearchViewControl.axaml</DependentUpon>
         </Compile>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\WallsAlphaCodersLib\WallsAlphaCodersLib.csproj" />
+    </ItemGroup>
 </Project>
