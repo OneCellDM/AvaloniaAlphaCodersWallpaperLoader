@@ -1,5 +1,4 @@
-﻿using AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces;
-using ReactiveUI;
+﻿using ReactiveUI;
 
 namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
 {

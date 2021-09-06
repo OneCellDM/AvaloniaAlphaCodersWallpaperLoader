@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Animation;
+﻿using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using AvaloniaAlphacodersWallpaperLoader.Models;
 using AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces;
@@ -30,7 +23,9 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
         private CategoryViewModel CategoryViewModel { get; set; }
         private RandomWallpapersViewModel RandomWallpapersViewModel { get; set; }
         private SearchViewModel SearchViewModel { get; set; }
+        
         private WallpaperApi api = new WallpaperApi("dcc164e06ea94f0187af2a6dfdc8bef8");
+        
         private ImageViewViewModel _ImageViewViewModel;
 
         public ObservableCollection<ImageModel> ImageModels { get; set; } = new ObservableCollection<ImageModel>();

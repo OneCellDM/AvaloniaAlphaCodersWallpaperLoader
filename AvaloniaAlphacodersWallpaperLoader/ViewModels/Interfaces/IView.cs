@@ -1,6 +1,5 @@
 ﻿using ReactiveUI;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using WallsAlphaCodersLib;
 
 namespace AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces

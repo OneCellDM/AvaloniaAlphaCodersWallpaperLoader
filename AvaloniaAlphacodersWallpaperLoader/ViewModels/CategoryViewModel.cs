@@ -34,6 +34,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
         public CategoryViewModel(WallpaperApi api, ObservableCollection<Models.ImageModel> imageModels) : base(api,
             imageModels)
         {
+            CurrentPage = 1;
             var resAwaiter = Api.Category.GetCategoryList().GetAwaiter();
             resAwaiter.OnCompleted(() => { resAwaiter.GetResult().Items.ForEach(x => Categories.Add(x)); });
         }

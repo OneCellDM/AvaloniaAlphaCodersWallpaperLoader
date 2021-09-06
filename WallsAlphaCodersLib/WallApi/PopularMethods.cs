@@ -10,7 +10,7 @@ namespace WallsAlphaCodersLib
         private WallpaperApi _Api;
         public PopularMethods(WallpaperApi api) => _Api = api;
         
-        public async Task<WallpaperResponse?> GetPopularCategory(PopularRequestParams @params) =>
+        public async Task<WallpaperResponse?> GetPopular(PopularRequestParams @params) =>
             await _Api.Request<WallpaperResponse, PopularRequestParams>("popular", @params);
         
        

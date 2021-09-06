@@ -3,11 +3,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using JetBrains.Annotations;
-using WallsAlphaCodersLib.ResponseModels;
 using WallsAlphaCodersLib.ResponseModels.Data;
 
 namespace AvaloniaAlphacodersWallpaperLoader.Models

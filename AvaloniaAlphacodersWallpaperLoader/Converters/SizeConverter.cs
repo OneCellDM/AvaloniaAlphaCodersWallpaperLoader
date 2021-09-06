@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Avalonia.Animation.Animators;
 using Avalonia.Data.Converters;
-using ReactiveUI;
 
 namespace AvaloniaAlphacodersWallpaperLoader.Converters
 {

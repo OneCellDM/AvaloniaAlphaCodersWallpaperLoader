@@ -3,12 +3,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Threading;
-using Avalonia.X11;
 using ReactiveUI;
 
 namespace AvaloniaAlphacodersWallpaperLoader.Models

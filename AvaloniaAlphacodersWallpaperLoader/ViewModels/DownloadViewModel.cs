@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaAlphacodersWallpaperLoader.Models;
 using AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces;
-using Microsoft.CodeAnalysis.Scripting.Hosting;
 using ReactiveUI;
 using WallsAlphaCodersLib;
 
