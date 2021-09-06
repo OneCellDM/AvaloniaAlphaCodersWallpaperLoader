@@ -3,89 +3,86 @@ using System.ComponentModel;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using JetBrains.Annotations;
 using WallsAlphaCodersLib.ResponseModels;
-
+using WallsAlphaCodersLib.ResponseModels.Data;
 
 namespace AvaloniaAlphacodersWallpaperLoader.Models
 {
-    public class ImageModel : Wallpaper, INotifyPropertyChanged
-    {
-        private Bitmap _bitmap;
-        private bool _Checked;
-        public bool Checked
-        {
-            get => _Checked;
-            set
-            {
-                _Checked = value;
-                OnPropertyChanged(); 
-            }
-        }
+	public class ImageModel : INotifyPropertyChanged,IModelBase<Wallpaper?>
+	{
+		
+		private Bitmap _bitmap;
+		private bool _Checked;
 
-        public Bitmap BitmapImage
-        {
-            get => _bitmap;
-            set
-            {
-                _bitmap = value;
-                OnPropertyChanged();
-            }
-        }
+		public bool Checked
+		{
+			get => _Checked;
+			set
+			{
+				_Checked = value;
+				OnPropertyChanged();
+			}
+		}
+		
+		public  Wallpaper Wallpaper { get; set; }
 
-        public async Task<MemoryStream>? GetStream()
-        {
-            try
-            {
-                using (HttpClient client = new HttpClient())
-                    return new MemoryStream(await client.GetByteArrayAsync(url_thumb));
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+		public Bitmap BitmapImage
+		{
+			get => _bitmap;
+			set
+			{
+				_bitmap = value;
+				OnPropertyChanged();
+			}
+		}
+		
+		private async Task<MemoryStream>? GetStream()
+		{
+			try
+			{
+				using (HttpClient client = new HttpClient())
+					return new MemoryStream(await client.GetByteArrayAsync(Wallpaper.Url_Thumb));
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+		}
 
-        public async void LoadBItmap()
-        {
-            using (var stream = await GetStream())
-                if (stream != null)
-                    BitmapImage = await Task.Run(() => Bitmap.DecodeToWidth(stream, 600));
-        }
+		public async void LoadBItmap()
+		{
+			try
+			{
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+			
+					
+					using (var stream = await GetStream())
+						if (stream != null)
+							BitmapImage = await Task.Run(() => Bitmap.DecodeToWidth(stream, 600,
+								Avalonia.Visuals.Media.Imaging.BitmapInterpolationMode.LowQuality));
+					
+				
+				
+			}
+			catch (Exception EX)
+			{
+				return;
+			}
+		}
+		
+		public event PropertyChangedEventHandler? PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public void Load(Wallpaper wallpaper)
-        {
-            id = wallpaper.id;
-            url_image = wallpaper.url_image;
-            url_page = wallpaper.url_page;
-            url_thumb = wallpaper.url_thumb;
-            width = wallpaper.width;
-            height = wallpaper.height;
-            file_size = wallpaper.file_size;
-            file_type = wallpaper.file_type;
-        }
-        public ImageModel(Wallpaper wallpaper)
-        {
-            id = wallpaper.id;
-            url_image = wallpaper.url_image;
-            url_page = wallpaper.url_page;
-            url_thumb = wallpaper.url_thumb;
-            width = wallpaper.width;
-            height = wallpaper.height;
-            file_size = wallpaper.file_size;
-            file_type = wallpaper.file_type;
-        }
-
-        public ImageModel()
-        {
-        }
-    }
+		public void SetData(Wallpaper? obj)
+		{
+			Wallpaper = obj;
+		}
+	}
 }

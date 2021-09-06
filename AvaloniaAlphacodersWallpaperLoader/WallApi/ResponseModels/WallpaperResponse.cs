@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using WallsAlphaCodersLib.Interfaces;
+using WallsAlphaCodersLib.ResponseModels.Data;
 
 namespace WallsAlphaCodersLib.ResponseModels
 {
-    public class WallpaperResponse : ICheckLast
+    public class WallpaperResponse 
     {
-        public List<Wallpaper>? wallpapers { get; set; }
+        public List<Wallpaper>? Wallpapers { get; set; }
 
-        public string? total_match { get; set; }
+        public string? Total_Match { get; set; }
 
-        public bool? check_last { get; set; }
+        public bool? Check_Last { get; set; }
     }
 }

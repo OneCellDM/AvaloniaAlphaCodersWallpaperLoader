@@ -7,9 +7,7 @@
              xmlns:viewModels="clr-namespace:AvaloniaAlphacodersWallpaperLoader.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaAlphacodersWallpaperLoader.Views.CategoryListControl">
-    <UserControl.DataContext>
-        <viewModels:CategoryViewModel />
-    </UserControl.DataContext>
+   
     <i:Interaction.Behaviors>
         <ia:EventTriggerBehavior EventName="PointerPressed">
             <ia:InvokeCommandAction Command="{Binding CloseCommand}" />

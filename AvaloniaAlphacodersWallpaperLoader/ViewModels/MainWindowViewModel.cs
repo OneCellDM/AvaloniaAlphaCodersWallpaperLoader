@@ -1,13 +1,21 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Animation;
+using Avalonia.Controls;
 using AvaloniaAlphacodersWallpaperLoader.Models;
 using AvaloniaAlphacodersWallpaperLoader.ViewModels.Interfaces;
+using AvaloniaAlphacodersWallpaperLoader.Views;
 using ReactiveUI;
 using WallsAlphaCodersLib;
 
 namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ReactiveObject
     {
         private bool _NewPage = true;
         private string _Title;
@@ -17,12 +25,25 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
         private bool _ImageViewIsVisible = false;
         private IView _ActiveView;
         private IView _OldActiveView;
+
+        private DownloadViewModel _DownloadViewModel;
         private CategoryViewModel CategoryViewModel { get; set; }
         private RandomWallpapersViewModel RandomWallpapersViewModel { get; set; }
         private SearchViewModel SearchViewModel { get; set; }
         private WallpaperApi api = new WallpaperApi("dcc164e06ea94f0187af2a6dfdc8bef8");
         private ImageViewViewModel _ImageViewViewModel;
+
         public ObservableCollection<ImageModel> ImageModels { get; set; } = new ObservableCollection<ImageModel>();
+
+        public ObservableCollection<DownloadModel> DownloadModels { get; set; } =
+            new ObservableCollection<DownloadModel>();
+
+        public  DownloadViewModel DownloadViewModel
+        {
+            get => _DownloadViewModel;
+            set => this.RaiseAndSetIfChanged(ref _DownloadViewModel, value);
+        }
+        public IReactiveCommand DownloadCommand { get; set; }
 
         public IView ActiveView
         {
@@ -40,6 +61,8 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
             ActiveView = _OldActiveView;
             _NewPage = false;
             SelectedMenuItem = _oldSelectedMenuItem;
+            if(SelectedMenuItem==3)
+                ActiveView.IsVisible = true;
         }
 
         public ImageViewViewModel ImageViewViewModel
@@ -53,7 +76,6 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
             get => _ImageViewIsVisible;
             set => this.RaiseAndSetIfChanged(ref _ImageViewIsVisible, value);
         }
-
 
         public int ImageSelectedIndex
         {
@@ -81,7 +103,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
             {
                 if (_NewPage) _oldSelectedMenuItem = _SelectedMenuItem;
                 this.RaiseAndSetIfChanged(ref _SelectedMenuItem, value);
-                    
+
                 if (_SelectedMenuItem > -1)
                 {
                     ActiveView.IsVisible = false;
@@ -90,7 +112,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
                         case 0:
                         {
                             ActiveView = RandomWallpapersViewModel;
-                            ActiveView.Load();
+                            RandomWallpapersViewModel.LoadWallpapers();
                             break;
                         }
                         case 1:
@@ -103,6 +125,11 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
                             ActiveView = CategoryViewModel;
                             break;
                         }
+                        case 3:
+                        {
+                            ActiveView = DownloadViewModel;
+                            break;
+                        }
                     }
 
                     if (_NewPage) ActiveView.IsVisible = true;
@@ -113,14 +140,26 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
 
         public MainWindowViewModel()
         {
+            DownloadCommand = ReactiveCommand.Create(async () =>
+                {
+                    OpenFolderDialog dialog = new OpenFolderDialog();
+
+                    var path = await dialog.ShowAsync(MainWindow.WindowInstance);
+
+                    if (path != null)
+                    {
+                        DownloadViewModel.Load(path);
+                    }
+                }
+            );
+           var awaiter= api.GetQueryCount().GetAwaiter();
+           
             CategoryViewModel = new CategoryViewModel(api, ImageModels);
             RandomWallpapersViewModel = new RandomWallpapersViewModel(api, ImageModels);
             SearchViewModel = new SearchViewModel(api, ImageModels);
+            DownloadViewModel = new DownloadViewModel(ImageModels);
             ActiveView = RandomWallpapersViewModel;
-            ActiveView.Load();
             SelectedMenuItem = 0;
-
-            
         }
     }
 }

@@ -8,14 +8,21 @@
         x:Class="AvaloniaAlphacodersWallpaperLoader.Views.MainWindow"
         xmlns:i="using:Avalonia.Xaml.Interactivity"
         xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+        xmlns:mwc="wrapVirtualization"
         xmlns:avaloniaAlphacodersWallpaperLoader="clr-namespace:AvaloniaAlphacodersWallpaperLoader"
+        xmlns:models="clr-namespace:AvaloniaAlphacodersWallpaperLoader.Models"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaAlphacodersWallpaperLoader">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
     </Design.DataContext>
-
+    <Window.Styles>
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+            <Setter Property="Background" Value="Gray" />
+            <Setter Property="TextBlock.Foreground" Value="White"></Setter>
+        </Style>
+    </Window.Styles>
 
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -25,7 +32,7 @@
 
         <ListBox HorizontalAlignment="Center" Background="transparent"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 VirtualizationMode="None" SelectedIndex="{Binding SelectedMenuItem}">
+                 VirtualizationMode="Simple" SelectedIndex="{Binding SelectedMenuItem}">
             <ListBox.Styles>
 
                 <Style Selector="ListBoxItem">
@@ -33,11 +40,6 @@
                     <Setter Property="BorderThickness" Value="2" />
                     <Setter Property="BorderBrush" Value="Gray" />
                     <Setter Property="Margin" Value="10" />
-                </Style>
-
-                <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-                    <Setter Property="Background" Value="Gray" />
-                    <Setter Property="TextBlock.Foreground" Value="White"></Setter>
                 </Style>
             </ListBox.Styles>
 
@@ -55,13 +57,18 @@
             <ListBoxItem>
                 <TextBlock Text="Категории" />
             </ListBoxItem>
+            <ListBoxItem>
+                <TextBlock Text="Менеджер загрузки"/>
+            </ListBoxItem>
         </ListBox>
 
-        <Grid Grid.Row="1" Margin="0,20">
+        <Grid Grid.Row="1" Margin="0,20,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
             <StackPanel Spacing="20" Orientation="Horizontal" HorizontalAlignment="Center">
 
                 <Button Command="{Binding ActiveView.PreviousPageCommand}"
@@ -95,11 +102,12 @@
                     </Button.Content>
                 </Button>
             </StackPanel>
-
-            <ListBox SelectedIndex="{Binding ImageSelectedIndex}" Margin="0,20" HorizontalAlignment="Center"
+           
+               
+           <ListBox SelectedIndex="{Binding ImageSelectedIndex}" Margin="0,20" HorizontalAlignment="Center"
                      Grid.Row="1" Background="White"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     Items="{Binding ImageModels}" VirtualizationMode="None">
+                     Items="{Binding ImageModels}" VirtualizationMode="Simple">
 
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
@@ -158,21 +166,34 @@
                     </DataTemplate>
                 </ListBox.DataTemplates>
             </ListBox>
+
+           
+            <StackPanel Grid.Row="2">
+
+                <Button Padding="15" Margin="0,0,0,20" Foreground="White" FontWeight="UltraBold"
+                        Content="Скачать изображения..."
+
+                        HorizontalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding DownloadCommand}">
+                    <Button.Background>
+                        <SolidColorBrush Color="Gray" Opacity="0.8" />
+                    </Button.Background>
+                </Button>
+
+            </StackPanel>
         </Grid>
-        
+
         <views:SearchViewControl Grid.RowSpan="2" IsVisible="{Binding IsVisible}"
                                  DataContext="{Binding SearchViewModel }" />
         <views:CategoryListControl Grid.RowSpan="2" DataContext="{Binding CategoryViewModel}"
                                    IsVisible="{Binding IsVisible}" />
+        
         <views:ImageView Grid.RowSpan="2" DataContext="{Binding ImageViewViewModel}"
-                         IsVisible="{Binding  DataContext.ImageViewIsVisible, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
-
-        <views:LoadingBlankPage Grid.Row="0" Grid.RowSpan="2" IsVisible="{Binding IsLoading}"
-                                DataContext="{Binding ActiveView}">
-            
-            <views:LoadingBlankPage.Background>
-                <SolidColorBrush Color="Gray" Opacity="0.8"></SolidColorBrush>
-            </views:LoadingBlankPage.Background>
-        </views:LoadingBlankPage>
+                         IsVisible="{Binding  DataContext.ImageViewIsVisible, 
+                         RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+        
+        <views:DownloadView IsVisible="{Binding IsVisible}" Grid.Row="1" Background="White"
+                            DataContext="{Binding DownloadViewModel }"  />
     </Grid>
 </Window>

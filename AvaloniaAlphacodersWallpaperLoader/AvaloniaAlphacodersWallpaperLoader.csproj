@@ -23,6 +23,9 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Remove="Views\Controls\**" />
+        <Compile Update="Views\DownloadView.axaml.cs">
+          <DependentUpon>DownloadView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Remove="Views\Controls\**" />

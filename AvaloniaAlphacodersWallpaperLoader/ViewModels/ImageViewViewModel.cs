@@ -8,7 +8,7 @@ using System.IO;
 
 namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
 {
-    public class ImageViewViewModel : ViewModelBase
+    public class ImageViewViewModel : ReactiveObject
     {
         public delegate void Close();
 
@@ -48,7 +48,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    return new MemoryStream(await client.GetByteArrayAsync(ImageModel.url_image));
+                    return new MemoryStream(await client.GetByteArrayAsync(ImageModel.Wallpaper.Url_Image));
                 }
             }
             catch (Exception ex)

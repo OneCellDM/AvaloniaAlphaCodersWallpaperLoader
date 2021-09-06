@@ -7,34 +7,23 @@ namespace WallsAlphaCodersLib.JsonConverters
     {
         private readonly JsonSerializer defaultSerializer = new JsonSerializer();
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType.IsIntegerType();
-        }
+        public override bool CanConvert(Type objectType)=>
+            objectType.IsNumberType();
+        
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+        public override object? ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
-            switch (reader.TokenType)
+            try
             {
-                case JsonToken.String:
-                {
-                    int number;
-
-                    bool success = Int32.TryParse(reader.Value.ToString(), out number);
-                    if (success)
-                        return defaultSerializer.Deserialize(reader, typeof(int));
-                    else return defaultSerializer.Deserialize(reader, objectType);
-                }
-                case JsonToken.Integer:
-                case JsonToken.Float:
-                case JsonToken.Null:
-                    return defaultSerializer.Deserialize(reader, objectType);
-
-                default:
-                    throw new JsonSerializationException(string.Format(
-                        "Token \"{0}\" of type {1} was not a JSON integer", reader.Value, reader.TokenType));
+                return defaultSerializer.Deserialize(reader, objectType);
             }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            return null;
         }
 
         public override bool CanWrite
@@ -50,7 +39,7 @@ namespace WallsAlphaCodersLib.JsonConverters
 
     public static class JsonExtensions
     {
-        public static bool IsIntegerType(this Type type)
+        public static bool IsNumberType(this Type type)
         {
             type = Nullable.GetUnderlyingType(type) ?? type;
             if (type == typeof(long)
