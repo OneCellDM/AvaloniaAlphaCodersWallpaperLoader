@@ -48,7 +48,7 @@
                 <ListBox.DataTemplates>
                     <DataTemplate>
                         <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Width="120"
-                                   Text="{Binding name}" />
+                                   Text="{Binding Name}" />
                     </DataTemplate>
                 </ListBox.DataTemplates>
             </ListBox>
