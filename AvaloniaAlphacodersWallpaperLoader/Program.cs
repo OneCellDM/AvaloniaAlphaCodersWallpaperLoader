@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿using System;
+using System.Diagnostics;
+using Avalonia;
 using Avalonia.ReactiveUI;
 
 namespace AvaloniaAlphacodersWallpaperLoader
@@ -10,9 +12,16 @@ namespace AvaloniaAlphacodersWallpaperLoader
         // yet and stuff might break.
         public static void Main(string[] args)
         {
-            BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
-            
+            try
+            {
+                BuildAvaloniaApp()
+                    .StartWithClassicDesktopLifetime(args);
+            }
+            catch (ArgumentException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.

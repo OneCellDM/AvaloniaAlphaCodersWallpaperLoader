@@ -104,7 +104,7 @@
                                         <MultiBinding StringFormat="{}{0}% ({1}/{2})">
                                             <Binding Path="Percentage" />
                                             <Binding Path="DownloadedSize" Converter="{StaticResource SizeConverter}" />
-                                            <Binding Path="Model.Wallpaper.file_size"
+                                            <Binding Path="Model.Wallpaper.File_Size"
                                                      Converter="{StaticResource SizeConverter}" />
                                             
                                         </MultiBinding>

@@ -75,8 +75,20 @@ namespace AvaloniaAlphacodersWallpaperLoader.Models
 		public event PropertyChangedEventHandler? PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			try
+			{
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			}
+			catch (ArgumentException)
+			{
+				return;
+			}
+
+
+
+		}
 
 		public void SetData(Wallpaper? obj)
 		{

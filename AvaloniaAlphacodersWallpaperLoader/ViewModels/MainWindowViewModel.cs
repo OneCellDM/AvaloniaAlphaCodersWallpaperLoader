@@ -147,8 +147,7 @@ namespace AvaloniaAlphacodersWallpaperLoader.ViewModels
                     }
                 }
             );
-           var awaiter= api.GetQueryCount().GetAwaiter();
-           
+
             CategoryViewModel = new CategoryViewModel(api, ImageModels);
             RandomWallpapersViewModel = new RandomWallpapersViewModel(api, ImageModels);
             SearchViewModel = new SearchViewModel(api, ImageModels);
